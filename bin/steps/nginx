@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+readonly nginx_version="1.6.2"
+
+readonly nginx_url="http://nginx.org/download/nginx-${nginx_version}.tar.gz"
+readonly nginx_sig="http://nginx.org/download/nginx-${nginx_version}.tar.gz.asc"
+
+source "${BIN_DIR}/utils"
+
+
+if [[ ! -d ".nginx-conf" ]]; then
+  exit 0 # nothing to do
+fi
+
+if [[ ! -f "${CACHE_DIR}/nginx-${nginx_version}/objs/nginx" ]]; then
+  puts-step "Downloading nginx"
+  mkdir -p "${CACHE_DIR}"
+
+  wget -q -P "${CACHE_DIR}" $nginx_url
+  wget -q -P "${CACHE_DIR}" $nginx_sig
+
+  puts-step "Checking signature"
+
+  # Import Maxim Dounin’s PGP public key
+  # http://nginx.org/en/pgp_keys.html
+  gpg -q --keyserver pgp.mit.edu --recv-keys A1C052F8 | indent
+  gpg -q --verify "${CACHE_DIR}/nginx-${nginx_version}.tar.gz.asc" \
+    "${CACHE_DIR}/nginx-${nginx_version}.tar.gz" | indent
+
+  tar xf "${CACHE_DIR}/nginx-${nginx_version}.tar.gz" -C "${CACHE_DIR}"
+
+  puts-step "Building nginx"
+
+  pushd "${CACHE_DIR}/nginx-${nginx_version}" >/dev/null
+
+  {
+    ./configure --prefix="/srv/www/.nginx"
+    make
+  } | indent
+else
+  pushd "${CACHE_DIR}/nginx-${nginx_version}" >/dev/null
+fi
+
+puts-step "Copying files"
+
+make install >/dev/null | indent
+
+popd >/dev/null
+
+puts-step "Preparing environment"
+
+mkdir -p "${BUILD_DIR}/.profile.d"
+echo "export PATH=\"\$HOME/.nginx/sbin:\$PATH\"" \
+  >"${BUILD_DIR}/.profile.d/nginx.sh"
+
+cp -R "/srv/www/.nginx" "${BUILD_DIR}"
+cp "${ROOT_DIR}/share/nginx.conf" "${BUILD_DIR}/.nginx/conf"
+cp "${ROOT_DIR}/share/start-nginx" "${BUILD_DIR}"
