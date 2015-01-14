@@ -65,15 +65,12 @@ TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
 # Set new context.
 ORIG_BUILD_DIR=$BUILD_DIR
-LIBRARY_DIR="$APP_PAAS_DIR/vendor/lib"
 BUILDPACK_PYTHON_HOME=$BUILD_DIR/$PAASPROVIDER_DIR/python
 
 # Prepend proper path buildpack use.
 export PATH=$APP_PYTHON_HOME_DIR/bin:$PATH
 export PYTHONUNBUFFERED=1
 export LANG=en_US.UTF-8
-export LIBRARY_PATH=$LIBRARY_DIR
-export LD_LIBRARY_PATH=$LIBRARY_DIR
 
 # Switch to the repo's context.
 cd $BUILD_DIR
@@ -182,12 +179,6 @@ fi
 set -e
 hash -r
 
-# Pylibmc support.
-# See [`bin/steps/pylibmc`](pylibmc.html).
-bpwatch start pylibmc_install
-  source $BIN_DIR/steps/pylibmc
-bpwatch stop pylibmc_install
-
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
   bpwatch start mercurial_install
@@ -219,8 +210,6 @@ bpwatch stop collectstatic
 set-env PYTHONUNBUFFERED true
 set-env PYTHONHOME $APP_PYTHON_HOME_DIR
 set-env PATH '$PYTHONHOME/bin:$PATH'
-set-default-env LIBRARY_PATH $LIBRARY_DIR
-set-default-env LD_LIBRARY_PATH $LIBRARY_DIR
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH $APP_DIR/
