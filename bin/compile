@@ -71,7 +71,7 @@ BUILDPACK_PYTHON_HOME=$BUILD_DIR/$PAASPROVIDER_DIR/python
 export PATH=$APP_PYTHON_HOME_DIR/bin:$PATH
 export PYTHONUNBUFFERED=1
 export LANG=en_US.UTF-8
-export LIBRARY_PATH=/app/.extralibs/vendor/lib
+export LIBRARY_PATH=/app/.extralibs
 export LD_LIBRARY_PATH=$LIBRARY_PATH
 
 # Switch to the repo's context.
