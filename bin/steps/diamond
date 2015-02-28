@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+# This script serves as the Diamond build step of the
+# [**Python Buildpack**](https://github.com/cloudControl/buildpack-python)
+# compiler.
+#
+# A [buildpack](http://devcenter.heroku.com/articles/buildpacks) is an
+# adapter between a Python application and Heroku's runtime.
+#
+# This script is invoked by [`bin/compile`](/).
+
+# Patterned after: https://github.com/cirlabs/heroku-buildpack-geodjango
+
+VENDORED_DIAMOND="https://s3.amazonaws.com/pogopad-lib/diamond-4.0.41.tar.gz"
+
+# Syntax sugar.
+source $BIN_DIR/utils
+
+puts-step "Checking for Diamond"
+
+if [ ! -d $CACHE_DIR/diamond ]; then
+  # Download and extract Diamond into target vendor directory.
+  echo "Fetching and installing Diamond 4.0.41" | indent
+  curl -s -L -o tmp-diamond.tar.gz $VENDORED_DIAMOND
+  echo "Caching ..." | indent
+  tar -zxvf tmp-diamond.tar.gz >/dev/null
+  rm tmp-diamond.tar.gz
+  mv diamond $CACHE_DIR
+fi
+
+mkdir -p $BUILD_DIR/.extralibs
+cp -R $CACHE_DIR/diamond $BUILD_DIR/.extralibs
+echo "Installed" | indent
+# make the lib path accessible
+export DIAMOND_LIBRARY_PATH=$BUILD_DIR/.extralibs/diamond/bin/init.d/diamond
+echo "Diamond installed and accessible with env variable 'DIAMOND_LIBRARY_PATH'" | indent
