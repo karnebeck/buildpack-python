@@ -179,6 +179,13 @@ fi
 set -e
 hash -r
 
+# python-diamond support.
+# See ['bin/steps/diamond']
+bpwatch start diamond_install
+  source $BIN_DIR/steps/diamond
+bpwatch stop diamond_install
+
+
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
   bpwatch start mercurial_install
@@ -210,6 +217,7 @@ bpwatch stop collectstatic
 set-env PYTHONUNBUFFERED true
 set-env PYTHONHOME $APP_PYTHON_HOME_DIR
 set-env PATH '$PYTHONHOME/bin:$PATH'
+set-env DIAMOND_LIBRARY_PATH $DIAMOND_LIBRARY_PATH
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH $APP_DIR/
