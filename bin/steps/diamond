@@ -25,6 +25,7 @@ if [ ! -d $CACHE_DIR/diamond ]; then
   echo "Caching ..." | indent
   tar -zxvf tmp-diamond.tar.gz >/dev/null
   rm tmp-diamond.tar.gz
+  mv diamond-4.0.41 diamond
   mv diamond $CACHE_DIR
 fi
 
