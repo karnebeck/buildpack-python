@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# This script serves as the Diamond build step of the
+# [**Python Buildpack**](https://github.com/cloudControl/buildpack-python)
+# compiler.
+#
+# A [buildpack](http://devcenter.heroku.com/articles/buildpacks) is an
+# adapter between a Python application and Heroku's runtime.
+#
+# This script is invoked by [`bin/compile`](/).
+
+# Patterned after: https://github.com/cirlabs/heroku-buildpack-geodjango
+
+VENDORED_PS_MEM="https://s3.amazonaws.com/pogopad-lib/ps_mem-fa7fde173fa77eb924fb65406b63169a8bf67657.tar.gz"
+
+# Syntax sugar.
+source $BIN_DIR/utils
+
+puts-step "Checking for ps_mem"
+
+if [ ! -d $CACHE_DIR/ps_mem ]; then
+  # Download and extract ps_mem into target vendor directory.
+  echo "Fetching and installing ps_mem" | indent
+  curl -s -L -o tmp-ps_mem.tar.gz $VENDORED_DIAMOND
+  echo "Caching ..." | indent
+  tar -zxvf tmp-ps_mem.tar.gz > /dev/null
+  rm tmp-ps_mem.tar.gz
+  mv ps_mem $CACHE_DIR
+fi
+
+mkdir -p $BUILD_DIR/.extralibs
+cp -R $CACHE_DIR/ps_mem $BUILD_DIR/.extralibs
+echo "Installed" | indent
