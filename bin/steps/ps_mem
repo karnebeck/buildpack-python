@@ -25,6 +25,7 @@ if [ ! -d $CACHE_DIR/ps_mem ]; then
   echo "Caching ..." | indent
   tar -zxvf tmp-ps_mem.tar.gz > /dev/null
   rm tmp-ps_mem.tar.gz
+  mv ps_mem-fa7fde173fa77eb924fb65406b63169a8bf67657 ps_mem
   mv ps_mem $CACHE_DIR
 fi
 
