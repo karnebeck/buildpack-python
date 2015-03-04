@@ -187,6 +187,11 @@ bpwatch start diamond_install
   source $BIN_DIR/steps/diamond
 bpwatch stop diamond_install
 
+# ps_mem support.
+# See ['bin/steps/ps_mem']
+bpwatch start ps_mem_install
+  source $BIN_DIR/steps/ps_mem
+bpwatch stop ps_mem_install
 
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
