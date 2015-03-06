@@ -32,8 +32,3 @@ fi
 mkdir -p $BUILD_DIR/.extralibs
 cp -R $CACHE_DIR/diamond $BUILD_DIR/.extralibs
 echo "Installed" | indent
-# make the lib path accessible
-export DIAMOND=$BUILD_DIR/.extralibs/diamond/bin/init.d/diamond
-export LIBRARY_PATH=$BUILD_DIR/.extralibs:$BUILD_DIR/.extralibs/diamond/bin:$BUILD_DIR/.extralibs/diamond/bin/init.d
-export LD_LIBRARY_PATH=$BUILD_DIR/.extralibs:$BUILD_DIR/.extralibs/diamond/bin:$BUILD_DIR/.extralibs/diamond/bin/init.d
-echo "Diamond installed and accessible with env variable 'DIAMOND'" | indent
