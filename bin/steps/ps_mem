@@ -24,7 +24,7 @@ if [ ! -d $CACHE_DIR/ps_mem ]; then
   curl -s -L -o tmp-ps_mem.tar.gz $VENDORED_DIAMOND
   echo "Caching ..." | indent
   tar -zxvf tmp-ps_mem.tar.gz > /dev/null
-  listfiles = ls /app/.extralibs/
+  listfiles = 'ls /app/.extralibs/'
   echo $listfiles
   rm tmp-ps_mem.tar.gz
   mv ps_mem-master ps_mem
