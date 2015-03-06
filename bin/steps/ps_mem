@@ -23,7 +23,7 @@ if [ ! -d $CACHE_DIR/ps_mem ]; then
   echo "Fetching and installing ps_mem" | indent
   curl -s -L -o tmp-ps_mem.tar.gz $VENDORED_DIAMOND
   echo "Caching ..." | indent
-  tar -zxvf tmp-ps_mem.tar.gz > /dev/null
+  tar -zxvf tmp-ps_mem.tar.gz
   echo $(ls)
   rm tmp-ps_mem.tar.gz
   mv ps_mem-master ps_mem
