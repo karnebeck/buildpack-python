@@ -21,10 +21,9 @@ puts-step "Checking for ps_mem"
 if [ ! -d $CACHE_DIR/ps_mem ]; then
   # Download and extract ps_mem into target vendor directory.
   echo "Fetching and installing ps_mem" | indent
-  curl -s -L -o tmp-ps_mem.tar.gz $VENDORED_DIAMOND
+  curl -s -L -o tmp-ps_mem.tar.gz $VENDORED_PS_MEM
   echo "Caching ..." | indent
   tar -zxvf tmp-ps_mem.tar.gz
-  echo $(ls)
   rm tmp-ps_mem.tar.gz
   mv ps_mem-master ps_mem
   mv ps_mem $CACHE_DIR
